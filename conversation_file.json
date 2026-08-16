@@ -1,0 +1,10 @@
+[
+  {
+    "role": "owner",
+    "content": "I am the owner of this AI"
+  },
+  {
+    "role": "RAG",
+    "content": "what is RAG?"
+  }
+]

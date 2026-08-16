@@ -1,3 +1,5 @@
+import time
+import json
 # 1. A function called 'count_characters' that:
 #    - Takes a text string as input
 #    - Returns the number of characters
@@ -99,3 +101,56 @@ answer = api_responses["choices"][0]["message"]["content"]
 extension = api_responses["extensions"]["configured_tokens"]
 
 print(f"{answer}, {extension}")
+
+# Basic try/except
+def safe_divide(a,b):
+    try:
+        result = a/b
+        return result
+    except ZeroDivisionError:
+        print("Divide by zero return none")
+        return None
+
+print(safe_divide(2,9))
+print(safe_divide(2,0))
+
+# Error handling for API calls
+def call_api_safely(prompt,max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            if attempt < 5:
+                raise Exception("Temporarily unavailable API")
+            return f"Response to {prompt}"
+        except Exception as e:
+            waiting_time = 2 ** attempt
+            print(f"attempt no.{attempt+1} failed with error: {e}")
+            print(f"Waiting time {waiting_time} seconds")
+            time.sleep(waiting_time)
+    return f"Failed to execute API for some reasons"
+
+response = call_api_safely("What is RAG in AI?",2)
+print(response)
+
+def save_conversations(messages, filename="conversation_file.json"):
+    with open(filename,"w") as file:
+        json.dump(messages, file, indent=2)
+    print(f"Saved {messages} in {filename}")
+
+def load_conversations(filename):
+    try:
+        with open(filename, "r") as file:
+            messages = json.load(file)
+            print(f"Loaded the len of content {len(messages)}")
+            return messages
+    except FileNotFoundError:
+        print("File does not exist")
+        return []
+
+conversations = [
+    {"role": "owner","content":"I am the owner of this AI"},
+    {"role": "RAG","content": "what is RAG?"}
+]
+save_conversations(conversations)
+content = load_conversations("conversation_file.json")
+print(content)
+    
